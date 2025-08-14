@@ -1,40 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat de Vendas IA</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-    <style>
-        body { background-color: #000; color: #FFD700; font-family: Arial, sans-serif; }
-        .container { max-width: 600px; margin: 50px auto; padding: 20px; border: 2px solid #FFD700; border-radius: 10px; }
-        #chatBox { height: 400px; overflow-y: auto; border: 1px solid #FFD700; padding: 10px; margin-bottom: 10px; border-radius: 5px; background-color: #111; }
-        input { width: 80%; padding: 10px; border: 1px solid #FFD700; border-radius: 5px; background: #111; color: #FFD700; }
-        button { width: 18%; padding: 10px; margin-left: 2%; background-color: #FFD700; color: #000; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
-        button:hover { opacity: 0.8; }
-        .message { margin-bottom: 10px; }
-        .user { font-weight: bold; }
-        .bot { font-weight: bold; color: #00FFFF; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 class="text-2xl font-bold mb-4">Chat de Vendas IA</h1>
-        <div id="chatBox"></div>
-        <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
-        <button onclick="sendMessage()">Enviar</button>
-    </div>
+// Pegar o produto da URL
+const urlParams = new URLSearchParams(window.location.search);
+const product = urlParams.get('product');
 
-    <script>
-        const chatBox = document.getElementById('chatBox');
-
-        async function sendMessage() {
-            const input = document.getElementById('userInput');
-            const userMessage = input.value.trim();
-            if (!userMessage) return;
-
-            chatBox.innerHTML += `<div class="message"><span class="user">Você: </span>${userMessage}</div>`;
-            input.value = '';
+if (product) {
+    chatBox.innerHTML += `<div class="message"><span class="bot">IA: </span>Informações do produto carregadas: ${product}</div>`;
+}            input.value = '';
 
             try {
                 const response = await fetch('/api/chat', {

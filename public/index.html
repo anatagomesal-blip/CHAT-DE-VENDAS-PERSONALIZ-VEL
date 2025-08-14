@@ -1,40 +1,26 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat de Vendas IA</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-    <style>
-        body { background-color: #000; color: #FFD700; font-family: Arial, sans-serif; }
-        .container { max-width: 600px; margin: 50px auto; padding: 20px; border: 2px solid #FFD700; border-radius: 10px; }
-        input, textarea { width: 100%; margin-top: 10px; padding: 10px; border: 1px solid #FFD700; background: #111; color: #FFD700; border-radius: 5px; }
-        button { background-color: #FFD700; color: #000; padding: 10px 20px; margin-top: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        button:hover { opacity: 0.8; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 class="text-2xl font-bold mb-4">Chat de Vendas IA</h1>
-        <p>Insira os detalhes do produto abaixo para criar seu link de chat:</p>
+<textarea id="productInfo" rows="5" placeholder="Cole aqui as informações do produto..."></textarea>
+<button onclick="generateLink()">Gerar Link do Chat</button>
+<div id="linkContainer" class="mt-4"></div>
 
-        <textarea id="productInfo" rows="5" placeholder="Cole aqui as informações do produto..."></textarea>
-        <button onclick="generateLink()">Gerar Link do Chat</button>
+<script>
+function generateLink() {
+    const productInfo = document.getElementById('productInfo').value.trim();
+    if (!productInfo) {
+        alert("Insira informações do produto!");
+        return;
+    }
 
-        <div id="linkContainer" class="mt-4"></div>
-    </div>
-
-    <script>
-        function generateLink() {
-            const productInfo = document.getElementById('productInfo').value;
-            if (!productInfo) {
-                alert("Por favor, insira as informações do produto!");
-                return;
-            }
-
-            // CORREÇÃO: O arquivo chat.html está diretamente na raiz do public/
-            const chatLink = "/chat.html?product=" + encodeURIComponent(productInfo);
-
+    // O produto será enviado como parâmetro GET na URL
+    const chatLink = `/chat.html?product=${encodeURIComponent(productInfo)}`;
+    
+    document.getElementById('linkContainer').innerHTML = `
+        <p>Compartilhe este link com seus clientes:</p>
+        <a href="${window.location.origin + chatLink}" target="_blank" style="color:#FFD700; font-weight:bold;">
+            ${window.location.origin + chatLink}
+        </a>
+    `;
+}
+</script>
             document.getElementById('linkContainer').innerHTML = `
                 <p>Compartilhe este link com seus clientes:</p>
                 <a href="${chatLink}" target="_blank" style="color:#FFD700; font-weight:bold;">${window.location.origin + chatLink}</a>

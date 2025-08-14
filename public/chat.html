@@ -1,54 +1,23 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat com IA</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-    <style>
-        body { background-color: #000; color: #FFD700; font-family: Arial, sans-serif; }
-        .container { max-width: 600px; margin: 50px auto; padding: 20px; border: 2px solid #FFD700; border-radius: 10px; }
-        input, textarea { width: 100%; margin-top: 10px; padding: 10px; border: 1px solid #FFD700; background: #111; color: #FFD700; border-radius: 5px; }
-        button { background-color: #FFD700; color: #000; padding: 10px 20px; margin-top: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        button:hover { opacity: 0.8; }
-        #chatBox { height: 300px; overflow-y: scroll; border: 1px solid #FFD700; padding: 10px; margin-top: 10px; background: #111; border-radius: 5px; }
-        .message { margin-bottom: 10px; }
-        .user { font-weight: bold; color: #FFD700; }
-        .bot { font-weight: bold; color: #0f0; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 class="text-2xl font-bold mb-4">Chat com IA</h1>
-        <div id="chatBox"></div>
-        <input type="text" id="userInput" placeholder="Escreva sua pergunta...">
-        <button onclick="sendMessage()">Enviar</button>
-    </div>
+async function sendMessage() {
+    const input = document.getElementById('userInput');
+    const userMessage = input.value.trim();
+    if (!userMessage) return;
 
-    <script>
-        const chatBox = document.getElementById('chatBox');
+    chatBox.innerHTML += `<div class="message"><span class="user">Você: </span>${userMessage}</div>`;
+    input.value = '';
 
-        function sendMessage() {
-            const input = document.getElementById('userInput');
-            const userMessage = input.value.trim();
-            if (!userMessage) return;
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: userMessage })
+        });
 
-            // Mostrar a mensagem do usuário
-            chatBox.innerHTML += `<div class="message"><span class="user">Você: </span>${userMessage}</div>`;
-            input.value = '';
+        const data = await response.json();
+        chatBox.innerHTML += `<div class="message"><span class="bot">IA: </span>${data.reply}</div>`;
+        chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Simular resposta da IA (futura integração com API)
-            setTimeout(() => {
-                const botMessage = "Olá! Aqui a IA responderá sobre o produto: " + decodeURIComponent(getQueryParam('product'));
-                chatBox.innerHTML += `<div class="message"><span class="bot">IA: </span>${botMessage}</div>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 1000);
-        }
-
-        function getQueryParam(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
-    </script>
-</body>
-</html>
+    } catch (err) {
+        chatBox.innerHTML += `<div class="message"><span class="bot">IA: </span>Erro ao enviar mensagem</div>`;
+    }
+}

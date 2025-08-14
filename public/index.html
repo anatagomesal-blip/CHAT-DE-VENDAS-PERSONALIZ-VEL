@@ -16,3 +16,30 @@
 <body>
     <div class="container">
         <h1 class="text-2xl font-bold mb-4">Chat de Vendas IA</h1>
+        <p>Insira os detalhes do produto abaixo para criar seu link de chat:</p>
+
+        <textarea id="productInfo" rows="5" placeholder="Cole aqui as informações do produto..."></textarea>
+        <button onclick="generateLink()">Gerar Link do Chat</button>
+
+        <div id="linkContainer" class="mt-4"></div>
+    </div>
+
+    <script>
+        function generateLink() {
+            const productInfo = document.getElementById('productInfo').value;
+            if (!productInfo) {
+                alert("Por favor, insira as informações do produto!");
+                return;
+            }
+
+            // CORREÇÃO: O arquivo chat.html está diretamente na raiz do public/
+            const chatLink = "/chat.html?product=" + encodeURIComponent(productInfo);
+
+            document.getElementById('linkContainer').innerHTML = `
+                <p>Compartilhe este link com seus clientes:</p>
+                <a href="${chatLink}" target="_blank" style="color:#FFD700; font-weight:bold;">${window.location.origin + chatLink}</a>
+            `;
+        }
+    </script>
+</body>
+</html>
